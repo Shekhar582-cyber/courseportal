@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<h2>Login Page</h2>
+
+<input type="text" id="email" placeholder="Enter Email"><br><br>
+<input type="password" id="password" placeholder="Enter Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+    function login() {
+        let user = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
+
+        fetch("http://localhost:8081/users/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data) {
+                alert("Login Success ✅");
+            } else {
+                alert("Invalid Credentials ❌");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
