@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register-Page</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+<div class ="container">
+    <h2>Register Page</h2>
+    <input type="text" id="name" placeholder="Name"><br><br>
+    <input type="email" id="email" placeholder="Enter Email"><br><br>
+    <input type="password" id="password" placeholder="Enter password"><br><br>
+    <button onclick="register()">Register</button>
+    <a href="login.html">Already have an account? Login here</a>
+</div>
+<script>
+    function register() {
+
+        // 1. Get input values
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        // 2. Generate random ID
+        let id = Math.floor(Math.random() * 1000);
+
+        // 3. Create user object
+        let user = {
+            id: id,
+            name: name,
+            email: email,
+            password: password
+        };
+
+        // 4. Call backend API
+        fetch("http://localhost:8081/users/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data) {
+                alert("Registered Successfully ✅");
+
+                // redirect to login page
+                window.location.href = "login.html";
+            } else {
+                alert("Registration Failed ❌");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Error occurred ❌");
+        });
+    }
+</script>
+</body>
+</html>
