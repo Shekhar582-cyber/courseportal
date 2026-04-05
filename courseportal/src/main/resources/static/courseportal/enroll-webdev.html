@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll – Web Development | Course Portal</title>
+    <meta name="description"
+        content="Enroll in our Web Development course and master HTML, CSS, JavaScript, React and Node.js.">
+    <link rel="stylesheet" href="enroll.css">
+    <style>
+        :root {
+            --accent: #60a5fa;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="nav" id="navbar">
+        <div class="nav-inner">
+            <a href="Homepage.html" class="nav-brand">🎓 Course Portal</a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="Homepage.html">Home</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="index.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER -->
+    <section class="enroll-hero">
+        <div class="bg-glow"></div>
+        <div class="enroll-hero-inner">
+            <span class="course-emoji">🌐</span>
+            <div class="badge-hero">Beginner to Advanced</div>
+            <h1>Web <span class="gradient-text">Development</span></h1>
+            <p>Build modern, responsive, full-stack web applications from scratch with industry-standard tools and
+                frameworks.</p>
+        </div>
+    </section>
+
+    <!-- MAIN LAYOUT -->
+    <div class="enroll-layout">
+
+        <!-- LEFT: Course Info -->
+        <div class="course-info">
+
+            <!-- Highlights -->
+            <h2 class="section-title"><span>⚡</span> Course Highlights</h2>
+            <div class="highlights">
+                <div class="highlight-item">
+                    <div class="hi-icon">⏱️</div>
+                    <div class="hi-text"><strong>Duration</strong><span>6 Months</span></div>
+                </div>
+                <div class="highlight-item">
+                    <div class="hi-icon">🎥</div>
+                    <div class="hi-text"><strong>Lectures</strong><span>120+ Videos</span></div>
+                </div>
+                <div class="highlight-item">
+                    <div class="hi-icon">📶</div>
+                    <div class="hi-text"><strong>Level</strong><span>Beginner → Advanced</span></div>
+                </div>
+                <div class="highlight-item">
+                    <div class="hi-icon">🏆</div>
+                    <div class="hi-text"><strong>Certificate</strong><span>Included</span></div>
+                </div>
+                <div class="highlight-item">
+                    <div class="hi-icon">💬</div>
+                    <div class="hi-text"><strong>Language</strong><span>English / Hindi</span></div>
+                </div>
+                <div class="highlight-item">
+                    <div class="hi-icon">♾️</div>
+                    <div class="hi-text"><strong>Access</strong><span>Lifetime</span></div>
+                </div>
+            </div>
+
+            <!-- What you'll learn -->
+            <h2 class="section-title"><span>📚</span> What You'll Learn</h2>
+            <div class="learn-list">
+                <div class="learn-item">HTML5 Semantics & Accessibility</div>
+                <div class="learn-item">CSS3, Flexbox & Grid Layouts</div>
+                <div class="learn-item">JavaScript ES6+ & DOM Manipulation</div>
+                <div class="learn-item">React.js & Component Architecture</div>
+                <div class="learn-item">Node.js & Express REST APIs</div>
+                <div class="learn-item">MongoDB Database Integration</div>
+                <div class="learn-item">Git & GitHub Version Control</div>
+                <div class="learn-item">Deployment on Vercel & Netlify</div>
+            </div>
+
+            <!-- Curriculum -->
+            <h2 class="section-title"><span>🗂️</span> Curriculum</h2>
+            <div class="curriculum">
+                <div class="module open">
+                    <button class="module-header">Module 1 — HTML & CSS Fundamentals<span
+                            class="module-arrow">▼</span></button>
+                    <div class="module-body">
+                        <ul>
+                            <li>HTML5 Document Structure & Semantics</li>
+                            <li>CSS Selectors, Box Model & Properties</li>
+                            <li>Flexbox Layout Deep Dive</li>
+                            <li>CSS Grid System</li>
+                            <li>Responsive Design & Media Queries</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="module">
+                    <button class="module-header">Module 2 — JavaScript Essentials<span
+                            class="module-arrow">▼</span></button>
+                    <div class="module-body">
+                        <ul>
+                            <li>Variables, Data Types & Operators</li>
+                            <li>Functions, Closures & Callbacks</li>
+                            <li>DOM & Event Handling</li>
+                            <li>ES6+ Features (Arrow, Destructuring, Spread)</li>
+                            <li>Async/Await & Fetch API</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="module">
+                    <button class="module-header">Module 3 — React.js<span class="module-arrow">▼</span></button>
+                    <div class="module-body">
+                        <ul>
+                            <li>Components, Props & State</li>
+                            <li>Hooks: useState, useEffect, useContext</li>
+                            <li>React Router & Navigation</li>
+                            <li>Redux Toolkit State Management</li>
+                            <li>Building a Full React Project</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="module">
+                    <button class="module-header">Module 4 — Backend with Node.js<span
+                            class="module-arrow">▼</span></button>
+                    <div class="module-body">
+                        <ul>
+                            <li>Node.js Runtime & npm Ecosystem</li>
+                            <li>Express.js REST API Design</li>
+                            <li>MongoDB & Mongoose ODM</li>
+                            <li>JWT Authentication & Bcrypt</li>
+                            <li>Full-Stack Project Deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Enrollment Form -->
+        <div class="enroll-form-card">
+            <div class="form-title">Enroll Now</div>
+            <div class="form-subtitle">Join 3,200+ students already learning</div>
+            <div class="form-price">₹4,999 <span>/ one-time</span></div>
+
+            <form id="enrollForm" onsubmit="submitEnroll(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Current Level</label>
+                    <select id="level">
+                        <option value="">Select level</option>
+                        <option>Complete Beginner</option>
+                        <option>Some HTML/CSS knowledge</option>
+                        <option>Know JavaScript basics</option>
+                        <option>Intermediate developer</option>
+                    </select>
+                </div>
+                <button type="submit" class="enroll-btn">🚀 Enroll in Web Development</button>
+            </form>
+            <p class="form-note">🔒 Secure checkout. 30-day money-back guarantee.</p>
+            <div class="form-includes">
+                <div class="include-item">120+ hours of on-demand video</div>
+                <div class="include-item">Downloadable source code & resources</div>
+                <div class="include-item">Certificate of completion</div>
+                <div class="include-item">Lifetime access &amp; free updates</div>
+                <div class="include-item">Community Discord access</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 Course Portal. All rights reserved.</p>
+    </footer>
+    <div class="toast" id="toast">🎉 Enrolled successfully! Check your email.</div>
+
+    <script src="enroll.js"></script>
+</body>
+
+</html>

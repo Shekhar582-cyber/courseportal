@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – Course Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Override the login icon for register */
+        .container::before {
+            content: '📝';
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Create Account</h2>
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <a href="index.html">Already have an account? Login here</a>
+    </div>
+
+    <script>
+        function register() {
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let id = Math.floor(Math.random() * 1000);
+            let user = { id, name, email, password };
+
+            fetch("http://localhost:8081/users/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        alert("Registered Successfully ✅");
+                        window.location.href = "index.html";
+                    } else {
+                        alert("Registration Failed ❌");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Error occurred ❌");
+                });
+        }
+    </script>
+</body>
+
+</html>

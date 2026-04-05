@@ -1,35 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomePage</title>
+    <title>Course Portal – Learn Without Limits</title>
+    <meta name="description"
+          content="Course Portal – Your one-stop destination for Web Development, Data Science, Machine Learning and Cloud Computing courses.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Homepage.css">
 </head>
-<body>
-<div class="nav">
-    <ul>
-        <li>
-            <a href="#">Course Portal</a>
-            <a href="Homepage.html">Home</a>
-            <a href="register.html">Register</a>
-            <a href="login.html">Login</a>
-            <a href="users.html">Users</a>
-        </li>
-    </ul>
-</div>
-<div class="Hero">
 
-    <h1>Welcome to Course Portal</h1>
-    <p>Your one-stop destination for all your course needs.</p>
-</div>
-<marquee behavior="scroll" direction="left" scrollamount="3">
-    <h2>Enroll in your favorite courses today!</h2>
-</marquee>
-<div class="container">
-    <div class="card1">
-        <h3>Explore Courses</h3>
-        <p>Discover a wide range of courses across various subjects and disciplines.</p>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────────── -->
+<nav class="nav" id="navbar">
+    <div class="nav-inner">
+        <a href="Homepage.html" class="nav-brand">
+            <span class="brand-icon">🎓</span> Course Portal
+        </a>
+
+        <!-- hamburger -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="Homepage.html">Home</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="index.html">Login</a></li>
+            <li><a href="users.html">Users</a></li>
+        </ul>
     </div>
+</nav>
+
+<!-- ── HERO ───────────────────────────────────────────────── -->
+<section class="hero" id="hero-section">
+    <div class="hero-bg"></div>
+
+    <!-- 3D floating orbs -->
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+
+    <!-- 3D spinning cube (hidden on mobile) -->
+    <div class="cube-scene">
+        <div class="cube">
+            <div class="cube-face front">🌐</div>
+            <div class="cube-face back">🤖</div>
+            <div class="cube-face left">📊</div>
+            <div class="cube-face right">☁️</div>
+            <div class="cube-face top">🚀</div>
+            <div class="cube-face bottom">🎓</div>
+        </div>
+    </div>
+
+    <div class="hero-content">
+        <p class="hero-tagline animate-up delay-1">🚀 Expand your skills today</p>
+        <h1 class="animate-up delay-2">Welcome to <span class="gradient-text">Course Portal</span></h1>
+        <p class="hero-sub animate-up delay-3">Your one-stop destination for all your learning needs.<br>Expert-led
+            courses. Learn at your own pace. Anywhere.</p>
+        <div class="hero-cta animate-up delay-4">
+            <a href="register.html" class="btn btn-primary">Get Started Free</a>
+            <a href="#courses" class="btn btn-outline">Browse Courses</a>
+        </div>
+    </div>
+    <div class="hero-scroll-hint">
+        <span class="scroll-arrow">↓</span>
+    </div>
+</section>
+
+<!-- ── TICKER ─────────────────────────────────────────────── -->
+<div class="ticker-wrap">
+    <div class="ticker">
+        <span>🎯 Enroll in your favourite courses today!</span>
+        <span>💡 New courses added every week!</span>
+        <span>📚 Learn at your own pace, anytime, anywhere!</span>
+        <span>🏆 Earn certificates &amp; boost your career!</span>
+        <span>🎯 Enroll in your favourite courses today!</span>
+        <span>💡 New courses added every week!</span>
+        <span>📚 Learn at your own pace, anytime, anywhere!</span>
+        <span>🏆 Earn certificates &amp; boost your career!</span>
+    </div>
+</div>
+
+<!-- ── STATS ──────────────────────────────────────────────── -->
+<section class="stats reveal">
+    <div class="stat-item">
+        <span class="stat-num" data-target="50">0</span><span class="stat-unit">+</span>
+        <p>Courses</p>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num" data-target="12000">0</span><span class="stat-unit">+</span>
+        <p>Students Enrolled</p>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num" data-target="98">0</span><span class="stat-unit">%</span>
+        <p>Satisfaction Rate</p>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num" data-target="24">0</span><span class="stat-unit">/7</span>
+        <p>Support</p>
+    </div>
+</section>
+
+<!-- ── COURSES ────────────────────────────────────────────── -->
+<section class="courses-section" id="courses">
+    <div class="section-header reveal">
+        <h2>Our <span class="gradient-text">Top Courses</span></h2>
+        <p>Handpicked programmes to accelerate your career</p>
+    </div>
+
+    <div class="courses-grid">
+        <div class="course-card reveal" data-tilt>
+            <div class="card-img" style="background-image:url('unnamed.png')"></div>
+            <div class="card-body">
+                <span class="badge badge-blue">Beginner – Advanced</span>
+                <h3>Web Development</h3>
+                <p>Build full-stack apps with HTML, CSS, JavaScript, React &amp; Node.</p>
+                <a href="enroll-webdev.html" class="card-link">Enroll Now →</a>
+            </div>
+        </div>
+
+        <div class="course-card reveal" data-tilt>
+            <div class="card-img" style="background-image:url('1745405707818_Data Science Course.png')"></div>
+            <div class="card-body">
+                <span class="badge badge-green">Intermediate</span>
+                <h3>Data Science</h3>
+                <p>Analyse data, create visualisations and extract powerful insights.</p>
+                <a href="enroll-datascience.html" class="card-link">Enroll Now →</a>
+            </div>
+        </div>
+
+        <div class="course-card reveal" data-tilt>
+            <div class="card-img"
+                 style="background-image:url('346-3460443_machine-learning-course-near-me-machine-learning-logo.png')">
+            </div>
+            <div class="card-body">
+                <span class="badge badge-purple">Advanced</span>
+                <h3>Machine Learning</h3>
+                <p>Explore AI, neural networks, and real-world ML model deployment.</p>
+                <a href="enroll-ml.html" class="card-link">Enroll Now →</a>
+            </div>
+        </div>
+
+        <div class="course-card reveal" data-tilt>
+            <div class="card-img" style="background-image:url('images (1).jpg')"></div>
+            <div class="card-body">
+                <span class="badge badge-orange">All Levels</span>
+                <h3>Cloud Computing</h3>
+                <p>Master AWS, Azure, and Google Cloud. Deploy at scale with confidence.</p>
+                <a href="enroll-cloud.html" class="card-link">Enroll Now →</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- ── ABOUT ──────────────────────────────────────────────── -->
+<section class="about-section reveal" id="about">
+    <div class="about-text">
+        <h2>About <span class="gradient-text">Us</span></h2>
+        <p>
+            To enroll in our courses, simply click <strong>Register</strong> in the navigation bar and fill out the
+            registration form.
+            Once registered, log in using your credentials and start exploring our wide range of programmes.
+        </p>
+        <p>
+            We offer courses in web development, data science, machine learning, cloud computing, and much more.
+            Our platform is designed to provide a seamless learning experience — learn at your own pace and access
+            course materials anytime, anywhere.
+        </p>
+        <p>Join us today and take the first step towards your learning goals! 🚀</p>
+        <div class="about-cta">
+            <a href="register.html" class="btn btn-primary">Register Now</a>
+            <a href="index.html" class="btn btn-outline">Login</a>
+        </div>
+    </div>
+    <div class="about-visual">
+        <div class="visual-card vc1">🌐 Web Dev</div>
+        <div class="visual-card vc2">📊 Data Science</div>
+        <div class="visual-card vc3">🤖 ML / AI</div>
+        <div class="visual-card vc4">☁️ Cloud</div>
+    </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer class="footer">
+    <p>© 2024 Course Portal. All rights reserved. | Made with ❤️</p>
+</footer>
+
+<script src="Homepage.js"></script>
 </body>
+
 </html>

@@ -24,48 +24,6 @@
         </tbody>
     </table>
     <script>
-        function deleteUser(id) {
-
-    fetch(`http://localhost:8081/users/delete/${id}`, {
-        method: "DELETE"
-    })
-    .then(() => {
-        alert("User Deleted ✅");
-        loadUsers(); // refresh table
-    })
-    .catch(err => {
-        console.error(err);
-    });
-}
-
-function editUser(id, name, email, password) {
-
-    let newName = prompt("Enter new name", name);
-    let newEmail = prompt("Enter new email", email);
-    let newPassword = prompt("Enter new password", password);
-
-    let user = {
-        id: id,
-        name: newName,
-        email: newEmail,
-        password: newPassword
-    };
-
-    fetch("http://localhost:8081/users/update", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-    })
-    .then(res => res.json())
-    .then(() => {
-        alert("User Updated ✅");
-        loadUsers();
-    })
-    .catch(err => console.error(err));
-}
-
         function loadUsers() {
 
             fetch("http://localhost:8081/users/all")
@@ -79,18 +37,15 @@ function editUser(id, name, email, password) {
 
                 // loop through users
                 data.forEach(user => {
-let row = `
-<tr>
-    <td>${user.id}</td>
-    <td>${user.name}</td>
-    <td>${user.email}</td>
-    <td>${user.password}</td>
-    <td>
-        <button onclick="editUser(${user.id}, '${user.name}', '${user.email}', '${user.password}')">Edit</button>
-        <button onclick="deleteUser(${user.id})">Delete</button>
-    </td>
-</tr>
-`;
+
+                    let row = `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.password}</td>
+                        </tr>
+                    `;
 
                     tableBody.innerHTML += row;
                 });
@@ -103,7 +58,6 @@ let row = `
 
         // call function when page loads
         window.onload = loadUsers;
-
     </script>
 
 </div>

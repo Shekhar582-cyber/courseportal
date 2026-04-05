@@ -1,0 +1,635 @@
+/* ══════════════════════════════════════════════════
+   ENROLL PAGES — Shared Styles
+══════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #0d0d0d;
+    color: #e8e8e8;
+    overflow-x: hidden;
+}
+
+/* ── Gradient util ── */
+.gradient-text {
+    background: linear-gradient(135deg, #ff6a00, #ee0979, #7b2ff7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ══════════════════════════════════════════════════
+   NAVBAR (reuse from Homepage)
+══════════════════════════════════════════════════ */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    transition: background 0.3s;
+}
+
+.nav.scrolled {
+    background: rgba(10, 10, 10, 0.97);
+}
+
+.nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-brand {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 28px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 15px;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.25s;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    border-radius: 2px;
+    transition: width 0.3s;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.35s, opacity 0.35s;
+}
+
+.hamburger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ══════════════════════════════════════════════════
+   ENROLL HERO BANNER
+══════════════════════════════════════════════════ */
+.enroll-hero {
+    margin-top: 64px;
+    padding: 80px 24px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.enroll-hero .bg-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 70% 60% at 50% 0%, var(--accent-glow, rgba(123, 47, 247, 0.3)), transparent 70%),
+        linear-gradient(180deg, #0d0d0d, #0f0a1a);
+}
+
+.enroll-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.course-emoji {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 20px;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+.enroll-hero h1 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.enroll-hero p {
+    font-size: clamp(16px, 2vw, 19px);
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 600px;
+    margin: 0 auto 30px;
+    line-height: 1.7;
+}
+
+.badge-hero {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 50px;
+    border: 1px solid var(--accent, #7b2ff7);
+    color: var(--accent, #a78bfa);
+    background: rgba(123, 47, 247, 0.12);
+    margin-bottom: 22px;
+}
+
+/* ══════════════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════════════ */
+.enroll-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    align-items: start;
+}
+
+/* ══════════════════════════════════════════════════
+   CURRICULUM / INFO SIDE
+══════════════════════════════════════════════════ */
+.course-info {}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title span {
+    font-size: 20px;
+}
+
+/* Highlights */
+.highlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 40px;
+}
+
+.highlight-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.highlight-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 106, 0, 0.3);
+}
+
+.hi-icon {
+    font-size: 28px;
+}
+
+.hi-text strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+}
+
+.hi-text span {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Curriculum accordion */
+.curriculum {
+    margin-bottom: 40px;
+}
+
+.module {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.module-header {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #e8e8e8;
+    padding: 18px 20px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background 0.25s;
+}
+
+.module-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.module-arrow {
+    font-size: 12px;
+    transition: transform 0.3s;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.module.open .module-arrow {
+    transform: rotate(180deg);
+}
+
+.module-body {
+    display: none;
+    padding: 0 20px 16px;
+}
+
+.module.open .module-body {
+    display: block;
+}
+
+.module-body ul {
+    list-style: none;
+}
+
+.module-body li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.module-body li:last-child {
+    border-bottom: none;
+}
+
+.module-body li::before {
+    content: '▶';
+    font-size: 9px;
+    color: #ff6a00;
+}
+
+/* What you'll learn */
+.learn-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.learn-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+.learn-item::before {
+    content: '✓';
+    color: #34d399;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ══════════════════════════════════════════════════
+   FORM SIDE
+══════════════════════════════════════════════════ */
+.enroll-form-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 20px;
+    padding: 36px 32px;
+    position: sticky;
+    top: 84px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.enroll-form-card:hover {
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+    transform: translateY(-4px);
+}
+
+.form-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.form-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 26px;
+}
+
+.form-price {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-price span {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 10px;
+    color: #e8e8e8;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    -webkit-appearance: none;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group select option {
+    background: #1a1a2e;
+    color: #e8e8e8;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #ff6a00;
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.18);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.enroll-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 8px 28px rgba(238, 9, 121, 0.4);
+    transition: transform 0.25s, box-shadow 0.25s;
+    letter-spacing: 0.3px;
+}
+
+.enroll-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(238, 9, 121, 0.55);
+}
+
+.enroll-btn:active {
+    transform: translateY(0);
+}
+
+.form-note {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.form-includes {
+    margin-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 18px;
+}
+
+.include-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 9px;
+}
+
+.include-item::before {
+    content: '✓';
+    color: #34d399;
+    font-weight: 800;
+}
+
+/* ══════════════════════════════════════════════════
+   SUCCESS TOAST
+══════════════════════════════════════════════════ */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ══════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════ */
+.footer {
+    background: #0a0a0a;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    text-align: center;
+    padding: 24px 20px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .enroll-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .enroll-form-card {
+        position: static;
+    }
+
+    .highlights {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.97);
+        flex-direction: column;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+    }
+
+    .nav-links.open {
+        max-height: 300px;
+    }
+
+    .nav-links li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 16px 24px;
+    }
+
+    .highlights {
+        grid-template-columns: 1fr;
+    }
+
+    .learn-list {
+        grid-template-columns: 1fr;
+    }
+
+    .enroll-form-card {
+        padding: 28px 20px;
+    }
+}
