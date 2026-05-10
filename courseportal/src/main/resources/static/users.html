@@ -1,65 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users List</title>
-    <link rel="stylesheet" href="user.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management – Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: #e2e8f0;
+      padding: 32px 16px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1000px;
+      margin: 0 auto 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-sub { color: rgba(255,255,255,0.45); font-size: 0.85rem; margin-top: 2px; }
+    .back-btn {
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.15); }
+
+    .card {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    }
+    .card-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-header span { font-size: 0.85rem; color: rgba(255,255,255,0.4); }
+    #userCount {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.15);
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.04); }
+    tbody td {
+      padding: 14px 20px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      vertical-align: middle;
+    }
+    .role-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .role-admin   { background: linear-gradient(135deg,#f59e0b,#ef4444); color:#fff; }
+    .role-student { background: linear-gradient(135deg,#6366f1,#a855f7); color:#fff; }
+    .role-instructor { background: linear-gradient(135deg,#0f766e,#14b8a6); color:#fff; }
+    .role-select {
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+    }
+
+    .delete-btn {
+      padding: 5px 14px;
+      background: rgba(239,68,68,0.15);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 8px;
+      color: #f87171;
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .delete-btn:hover { background: rgba(239,68,68,0.3); }
+
+    .loading-row td {
+      text-align: center;
+      padding: 40px;
+      color: rgba(255,255,255,0.3);
+    }
+    .spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .access-denied {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .access-denied .icon { font-size: 4rem; margin-bottom: 16px; }
+    .access-denied h2 { font-size: 1.5rem; color: #f87171; margin-bottom: 8px; }
+    .access-denied p  { color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h2>Users List</h2>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Password</th>
-        </tr>
-        </thead>
 
-        <tbody id="usersList">
-        <!-- data will come here -->
-        </tbody>
-    </table>
-    <script>
-        function loadUsers() {
+<!-- Access guard: redirect non-admins immediately -->
+<script>
+  var role = sessionStorage.getItem('userRole');
+  if (role !== 'ADMIN') {
+    document.write('<div class="access-denied"><div class="icon">🚫</div><h2>Access Denied</h2><p>This page is for Administrators only.</p><a href="Homepage.html" style="padding:10px 24px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;">Go to Homepage</a></div>');
+    throw new Error('Access denied');
+  }
+</script>
 
-            fetch("http://localhost:8081/users/all")
-            .then(response => response.json())
-            .then(data => {
-
-                let tableBody = document.getElementById("usersList");
-
-                // clear previous data
-                tableBody.innerHTML = "";
-
-                // loop through users
-                data.forEach(user => {
-
-                    let row = `
-                        <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                            <td>${user.email}</td>
-                            <td>${user.password}</td>
-                        </tr>
-                    `;
-
-                    tableBody.innerHTML += row;
-                });
-
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        }
-
-        // call function when page loads
-        window.onload = loadUsers;
-    </script>
-
+<div class="header">
+  <div>
+    <h1>👑 User Management</h1>
+    <div class="header-sub">Admin Panel · All registered users</div>
+  </div>
+  <a href="Homepage.html" class="back-btn">← Back to Homepage</a>
 </div>
+
+<div class="card">
+  <div class="card-header">
+    <span>Registered Users</span>
+    <span id="userCount">…</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="usersList">
+      <tr class="loading-row">
+        <td colspan="6"><span class="spinner"></span>Loading users…</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function loadUsers() {
+    var role = sessionStorage.getItem('userRole') || '';
+    fetch('/users/all', {
+      headers: { 'X-User-Role': role }
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Forbidden');
+      return res.json();
+    })
+    .then(function(data) {
+      var tbody = document.getElementById('usersList');
+      document.getElementById('userCount').textContent = data.length + ' users';
+      tbody.innerHTML = '';
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">No users found.</td></tr>';
+        return;
+      }
+      data.forEach(function(user) {
+        var userRole = (user.role || 'STUDENT').toUpperCase();
+        var roleClass = userRole === 'ADMIN' ? 'role-admin' : (userRole === 'INSTRUCTOR' ? 'role-instructor' : 'role-student');
+        var row = '<tr>' +
+          '<td style="color:rgba(255,255,255,0.4);font-size:0.8rem;">#' + user.id + '</td>' +
+          '<td style="font-weight:500;color:#f1f5f9;">' + (user.name || '—') + '</td>' +
+          '<td>' + user.email + '</td>' +
+          '<td><span class="role-tag ' + roleClass + '">' + userRole + '</span></td>' +
+          '<td><select class="role-select" onchange="changeRole(' + user.id + ', this.value)" ' + (user.id == sessionStorage.getItem('userId') ? 'disabled' : '') + '>' +
+            '<option value="STUDENT"' + (userRole === 'STUDENT' ? ' selected' : '') + '>Student</option>' +
+            '<option value="INSTRUCTOR"' + (userRole === 'INSTRUCTOR' ? ' selected' : '') + '>Instructor</option>' +
+            '<option value="ADMIN"' + (userRole === 'ADMIN' ? ' selected' : '') + '>Admin</option>' +
+          '</select></td>' +
+          '<td><button class="delete-btn" onclick="deleteUser(' + user.id + ')">Delete</button></td>' +
+          '</tr>';
+        tbody.innerHTML += row;
+      });
+    })
+    .catch(function(err) {
+      document.getElementById('usersList').innerHTML =
+        '<tr><td colspan="6" style="text-align:center;padding:40px;color:#f87171;">Failed to load users. ' + err.message + '</td></tr>';
+    });
+  }
+
+  function changeRole(id, newRole) {
+    var role = sessionStorage.getItem('userRole') || '';
+    fetch('/users/role', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-User-Role': role },
+      body: JSON.stringify({ id: String(id), role: newRole })
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Failed');
+      return res.json();
+    })
+    .then(function() { loadUsers(); })
+    .catch(function() { alert('Role update failed'); loadUsers(); });
+  }
+
+  function deleteUser(id) {
+    if (!confirm('Delete user #' + id + '? This cannot be undone.')) return;
+    var role = sessionStorage.getItem('userRole') || '';
+    fetch('/users/delete/' + id, {
+      method: 'DELETE',
+      headers: { 'X-User-Role': role }
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Failed');
+      loadUsers();
+    })
+    .catch(function() { alert('Delete failed ❌'); });
+  }
+
+  window.onload = loadUsers;
+</script>
 </body>
 </html>

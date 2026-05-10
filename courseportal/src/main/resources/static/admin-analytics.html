@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Analytics – EduNest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="theme.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',sans-serif;background:#07070f;color:#e2e8f0;min-height:100vh}body.light{background:#f6f7fb;color:#111827}
+    nav{height:64px;padding:0 30px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,7,15,.92);border-bottom:1px solid rgba(255,255,255,.08)}body.light nav{background:#fff;border-color:#e5e7eb}
+    nav a{color:inherit;text-decoration:none;font-weight:800}.page{max-width:1180px;margin:0 auto;padding:36px 22px}
+    h1{font-size:2rem;margin-bottom:22px}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px}
+    .card,.panel{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:20px}body.light .card,body.light .panel{background:#fff;border-color:#e5e7eb}
+    .num{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.label{color:rgba(255,255,255,.5);font-size:.82rem}body.light .label{color:#6b7280}
+    .bar-row{display:grid;grid-template-columns:180px 1fr 70px;gap:12px;align-items:center;padding:10px 0}.bar{height:10px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#6366f1,#10b981)}
+    button{border:0;border-radius:10px;padding:9px 12px;background:rgba(255,255,255,.08);color:inherit;font-weight:800;cursor:pointer}
+  </style>
+</head>
+<body>
+<nav><a href="dashboard.html">🪺 EduNest</a><button onclick="toggleTheme()">Theme</button></nav>
+<main class="page">
+  <h1>Admin Analytics</h1>
+  <div class="stats" id="stats"></div>
+  <section class="panel"><h2>Popular Courses</h2><div id="popular"></div></section>
+</main>
+<script>
+var role=sessionStorage.getItem('userRole')||''; if(role!=='ADMIN') location.href='dashboard.html';
+fetch('/analytics/admin',{headers:{'X-User-Role':role}}).then(r=>r.json()).then(function(a){
+  var items=[['Students',a.totalStudents],['Courses',a.totalCourses],['Enrollments',a.totalEnrollments],['Completed',a.completedEnrollments],['Completion Rate',a.completionRate+'%'],['Reviews',a.totalReviews],['Paid Orders',a.paidPayments]];
+  document.getElementById('stats').innerHTML=items.map(i=>'<div class="card"><div class="num">'+i[1]+'</div><div class="label">'+i[0]+'</div></div>').join('');
+  var max=Math.max.apply(null,(a.popularCourses||[]).map(c=>c.enrollments).concat([1]));
+  document.getElementById('popular').innerHTML=(a.popularCourses||[]).map(c=>'<div class="bar-row"><strong>'+c.title+'</strong><div class="bar"><div class="fill" style="width:'+(c.enrollments*100/max)+'%"></div></div><span>'+c.enrollments+'</span></div>').join('');
+});
+</script>
+</body>
+</html>

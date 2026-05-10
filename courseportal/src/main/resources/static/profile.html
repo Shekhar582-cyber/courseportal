@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile – EduNest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#07070f;color:#e2e8f0;min-height:100vh}
+
+    nav{position:sticky;top:0;z-index:100;background:rgba(7,7,15,.9);backdrop-filter:blur(16px);
+        border-bottom:1px solid rgba(255,255,255,.07);padding:0 32px;height:64px;
+        display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{font-size:1.15rem;font-weight:800;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+    .nav-links{display:flex;gap:6px;list-style:none;align-items:center}
+    .nav-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.875rem;
+                 padding:6px 14px;border-radius:8px;transition:all .2s}
+    .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.09);color:#fff}
+    .nav-links a.logout{color:#f87171}
+
+    .page{max-width:760px;margin:0 auto;padding:48px 24px}
+
+    /* AVATAR CARD */
+    .avatar-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+                 border-radius:24px;padding:36px;text-align:center;margin-bottom:24px}
+    .avatar{width:88px;height:88px;border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#a855f7);
+            display:inline-flex;align-items:center;justify-content:center;
+            font-size:2.4rem;font-weight:800;color:#fff;
+            box-shadow:0 8px 32px rgba(99,102,241,.45);margin-bottom:16px}
+    .avatar-name{font-size:1.4rem;font-weight:800;margin-bottom:4px}
+    .avatar-email{color:rgba(255,255,255,.45);font-size:.88rem;margin-bottom:12px}
+    .badge-role{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.8px}
+    .badge-admin{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff}
+    .badge-student{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff}
+
+    /* SECTION CARDS */
+    .section-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+                  border-radius:20px;padding:28px;margin-bottom:20px}
+    .section-title{font-size:1rem;font-weight:700;margin-bottom:20px;
+                   display:flex;align-items:center;gap:8px}
+
+    label{display:block;color:rgba(255,255,255,.55);font-size:.78rem;font-weight:500;
+          margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase}
+    input[type="text"],input[type="password"],textarea{
+      width:100%;padding:12px 16px;background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff;
+      font-size:.95rem;font-family:'Inter',sans-serif;outline:none;
+      transition:border-color .2s,box-shadow .2s}
+    textarea{min-height:90px;resize:vertical}
+    input::placeholder{color:rgba(255,255,255,.25)}
+    input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+    input:read-only{color:rgba(255,255,255,.35);cursor:not-allowed}
+
+    .form-group{margin-bottom:16px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+
+    .btn{padding:11px 24px;border:none;border-radius:12px;font-family:'Inter',sans-serif;
+         font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .btn-primary{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;
+                 box-shadow:0 4px 16px rgba(99,102,241,.35)}
+    .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+    .btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;
+                box-shadow:0 4px 16px rgba(239,68,68,.3)}
+    .btn-danger:hover{opacity:.9;transform:translateY(-1px)}
+
+    /* eye toggle */
+    .pw-wrap{position:relative}
+    .pw-wrap input{padding-right:44px}
+    .eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+             background:none;border:none;cursor:pointer;color:rgba(255,255,255,.35);
+             font-size:1rem;line-height:1;transition:color .2s}
+    .eye-btn:hover{color:rgba(255,255,255,.7)}
+
+    .toast{position:fixed;bottom:24px;right:24px;padding:13px 20px;border-radius:12px;
+           font-size:.88rem;font-weight:500;color:#fff;z-index:9999;
+           opacity:0;transform:translateY(16px);transition:all .3s;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{background:linear-gradient(135deg,#10b981,#059669)}
+    .toast.error{background:linear-gradient(135deg,#ef4444,#dc2626)}
+
+    .loading{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);
+             border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+    .profile-stat{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+    .profile-stat strong{display:block;font-size:1.4rem}
+    .profile-stat span{font-size:.75rem;color:rgba(255,255,255,.45)}
+
+    @media(max-width:560px){.form-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="Homepage.html" class="nav-brand">🪺 EduNest</a>
+  <ul class="nav-links">
+    <li><a href="Homepage.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="profile.html" class="active">Profile</a></li>
+    <li><a href="#" onclick="logout()" class="logout">Logout</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- AVATAR CARD -->
+  <div class="avatar-card">
+    <div class="avatar" id="avatarEl">?</div>
+    <div class="avatar-name" id="profileName">–</div>
+    <div class="avatar-email" id="profileEmail">–</div>
+    <span class="badge-role" id="profileRole">–</span>
+    <div class="profile-stats">
+      <div class="profile-stat"><strong id="pEnrolled">0</strong><span id="pLabel1">Enrolled</span></div>
+      <div class="profile-stat"><strong id="pCompleted">0</strong><span id="pLabel2">Completed</span></div>
+      <div class="profile-stat"><strong id="pCerts">0</strong><span id="pLabel3">Certificates</span></div>
+    </div>
+  </div>
+
+  <!-- EDIT NAME -->
+  <div class="section-card">
+    <div class="section-title">✏️ Edit Profile</div>
+    <div class="form-group">
+      <label for="editName">Full Name</label>
+      <input type="text" id="editName" placeholder="Your full name">
+    </div>
+    <div class="form-group">
+      <label for="editEmail">Email Address</label>
+      <input type="text" id="editEmail" placeholder="–" readonly>
+    </div>
+    <div class="form-group">
+      <label for="photoUrl">Profile Photo URL</label>
+      <input type="text" id="photoUrl" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <textarea id="bio" placeholder="Short intro about you"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="skills">Skills</label>
+      <input type="text" id="skills" placeholder="Java, Web Development, Cloud">
+    </div>
+    <button class="btn btn-primary" id="saveBtn" onclick="saveName()">Save Changes</button>
+  </div>
+
+  <!-- CHANGE PASSWORD -->
+  <div class="section-card">
+    <div class="section-title">🔒 Change Password</div>
+    <div class="form-group">
+      <label for="curPw">Current Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="curPw" placeholder="Current password">
+        <button class="eye-btn" type="button" onclick="togglePw('curPw',this)">👁</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label for="newPw">New Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="newPw" placeholder="Min 6 chars">
+          <button class="eye-btn" type="button" onclick="togglePw('newPw',this)">👁</button>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label for="confirmPw">Confirm Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="confirmPw" placeholder="Repeat new password">
+          <button class="eye-btn" type="button" onclick="togglePw('confirmPw',this)">👁</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:18px">
+      <button class="btn btn-danger" id="pwBtn" onclick="changePassword()">Update Password</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Session ────────────────────────────────────────────────────
+  function getAuthValue(key) { return sessionStorage.getItem(key) || localStorage.getItem(key) || ''; }
+  ['userId', 'userRole', 'userName', 'userEmail'].forEach(function(key) {
+    var value = getAuthValue(key);
+    if (value) sessionStorage.setItem(key, value);
+  });
+  var userId    = getAuthValue('userId');
+  var userName  = getAuthValue('userName') || '';
+  var userEmail = getAuthValue('userEmail') || '';
+  var userRole  = getAuthValue('userRole') || '';
+
+  if (!userId || !userRole) { window.location.href = 'login.html'; }
+
+  // ── Populate ───────────────────────────────────────────────────
+  document.getElementById('avatarEl').textContent    = userName.charAt(0).toUpperCase() || '?';
+  document.getElementById('profileName').textContent  = userName;
+  document.getElementById('profileEmail').textContent = userEmail;
+  document.getElementById('editName').value           = userName;
+  document.getElementById('editEmail').value          = userEmail;
+
+  fetch('/users/' + userId).then(function(r){ return r.json(); }).then(function(u){
+    document.getElementById('photoUrl').value = u.photoUrl || '';
+    document.getElementById('bio').value = u.bio || '';
+    document.getElementById('skills').value = u.skills || '';
+    if (u.photoUrl) {
+      document.getElementById('avatarEl').style.background = 'url("' + u.photoUrl + '") center/cover';
+      document.getElementById('avatarEl').textContent = '';
+    }
+  });
+  var roleEl = document.getElementById('profileRole');
+  if (userRole === 'ADMIN') {
+    roleEl.textContent  = '👑 ADMIN';
+    roleEl.className    = 'badge-role badge-admin';
+    document.getElementById('pLabel1').textContent = 'Courses';
+    document.getElementById('pLabel2').textContent = 'Students';
+    document.getElementById('pLabel3').textContent = 'Reviews';
+    fetch('/analytics/admin', { headers: { 'X-User-Role': 'ADMIN' } })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        document.getElementById('pEnrolled').textContent = data.totalCourses || 0;
+        document.getElementById('pCompleted').textContent = data.totalStudents || 0;
+        document.getElementById('pCerts').textContent = data.totalReviews || 0;
+      });
+  } else if (userRole === 'INSTRUCTOR') {
+    roleEl.textContent  = '📘 INSTRUCTOR';
+    roleEl.className    = 'badge-role badge-admin';
+    document.getElementById('pLabel1').textContent = 'Courses';
+    document.getElementById('pLabel2').textContent = 'Lessons';
+    document.getElementById('pLabel3').textContent = 'Quizzes';
+    Promise.all([
+      fetch('/courses/all').then(function(r){ return r.json(); }),
+      fetch('/quizzes/attempts/user/' + userId).then(function(r){ return r.json(); }).catch(function(){ return []; })
+    ]).then(function(results){
+      var courses = results[0] || [];
+      var quizzes = results[1] || [];
+      var lessons = courses.reduce(function(sum, c){ return sum + (c.lessons || 0); }, 0);
+      document.getElementById('pEnrolled').textContent = courses.length;
+      document.getElementById('pCompleted').textContent = lessons;
+      document.getElementById('pCerts').textContent = quizzes.length;
+    });
+  } else {
+    roleEl.textContent  = '🎓 STUDENT';
+    roleEl.className    = 'badge-role badge-student';
+    fetch('/enrollments/user/' + userId).then(function(r){ return r.json(); }).then(function(items){
+      var completed = items.filter(function(i){ return i.completed || i.progress >= 100; }).length;
+      document.getElementById('pEnrolled').textContent = items.length;
+      document.getElementById('pCompleted').textContent = completed;
+      document.getElementById('pCerts').textContent = completed;
+    });
+  }
+
+  // ── Toast ──────────────────────────────────────────────────────
+  function showToast(msg, type) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + type;
+    setTimeout(function(){ t.classList.add('show'); }, 10);
+    setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+
+  // ── Save Name ──────────────────────────────────────────────────
+  function saveName() {
+    var newName = document.getElementById('editName').value.trim();
+    if (!newName) { showToast('Name cannot be empty', 'error'); return; }
+    var btn = document.getElementById('saveBtn');
+    btn.innerHTML = '<span class="loading"></span>Saving…'; btn.disabled = true;
+
+    fetch('/users/update', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: parseInt(userId),
+        name: newName,
+        email: userEmail,
+        password: '',
+        role: userRole,
+        photoUrl: document.getElementById('photoUrl').value.trim(),
+        bio: document.getElementById('bio').value.trim(),
+        skills: document.getElementById('skills').value.trim()
+      })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      sessionStorage.setItem('userName', data.name || newName);
+      localStorage.setItem('userName', data.name || newName);
+      document.getElementById('profileName').textContent  = data.name || newName;
+      document.getElementById('avatarEl').textContent     = (data.name || newName).charAt(0).toUpperCase();
+      showToast('Profile updated! ✅', 'success');
+    })
+    .catch(function(){ showToast('Failed to save. Try again ❌', 'error'); })
+    .finally(function(){ btn.innerHTML = 'Save Changes'; btn.disabled = false; });
+  }
+
+  // ── Change Password ────────────────────────────────────────────
+  function changePassword() {
+    var cur  = document.getElementById('curPw').value;
+    var nw   = document.getElementById('newPw').value;
+    var conf = document.getElementById('confirmPw').value;
+    if (!cur || !nw || !conf) { showToast('Please fill in all password fields', 'error'); return; }
+    if (nw.length < 6)         { showToast('New password must be at least 6 characters', 'error'); return; }
+    if (nw !== conf)            { showToast('Passwords do not match', 'error'); return; }
+
+    var btn = document.getElementById('pwBtn');
+    btn.innerHTML = '<span class="loading"></span>Updating…'; btn.disabled = true;
+
+    fetch('/users/change-password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: userEmail, currentPassword: cur, newPassword: nw })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.success) {
+        showToast('Password updated! 🔒', 'success');
+        document.getElementById('curPw').value = '';
+        document.getElementById('newPw').value = '';
+        document.getElementById('confirmPw').value = '';
+      } else {
+        showToast(data.message || 'Failed ❌', 'error');
+      }
+    })
+    .catch(function(){ showToast('Server error. Try again ❌', 'error'); })
+    .finally(function(){ btn.innerHTML = 'Update Password'; btn.disabled = false; });
+  }
+
+  // ── Eye toggle ─────────────────────────────────────────────────
+  function togglePw(id, btn) {
+    var el = document.getElementById(id);
+    el.type = el.type === 'password' ? 'text' : 'password';
+    btn.textContent = el.type === 'password' ? '👁' : '🙈';
+  }
+
+  function logout() {
+    sessionStorage.clear();
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
+    window.location.href = 'login.html';
+  }
+</script>
+<script src="chatbot.js"></script></body>
+</html>

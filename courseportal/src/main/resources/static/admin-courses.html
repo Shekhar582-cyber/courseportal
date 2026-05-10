@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Courses – Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+         color:#e2e8f0;min-height:100vh;padding:32px 16px}
+
+    /* HEADER */
+    .header{display:flex;align-items:center;justify-content:space-between;
+            max-width:1100px;margin:0 auto 32px;flex-wrap:wrap;gap:12px}
+    .header h1{font-size:1.6rem;font-weight:800;
+               background:linear-gradient(135deg,#f59e0b,#ef4444);
+               -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .header-sub{color:rgba(255,255,255,.45);font-size:.85rem;margin-top:2px}
+    .back-btn{padding:8px 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+              border-radius:10px;color:#e2e8f0;font-size:.875rem;font-family:'Inter',sans-serif;
+              cursor:pointer;text-decoration:none;transition:background .2s}
+    .back-btn:hover{background:rgba(255,255,255,.15)}
+
+    /* CARD */
+    .card{background:rgba(255,255,255,.07);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);
+          border-radius:20px;max-width:1100px;margin:0 auto;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,.4)}
+    .card-header{padding:20px 28px;border-bottom:1px solid rgba(255,255,255,.08);
+                 display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .count-badge{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;
+                 padding:2px 10px;border-radius:20px;font-size:.8rem;font-weight:700}
+    .add-btn{padding:8px 20px;background:linear-gradient(135deg,#6366f1,#a855f7);
+             border:none;border-radius:10px;color:#fff;font-size:.875rem;font-weight:600;
+             font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .2s,transform .15s}
+    .add-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+    /* TABLE */
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:14px 20px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:1px;
+             color:rgba(255,255,255,.4);text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.08);
+             background:rgba(0,0,0,.15)}
+    tbody tr{border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:rgba(255,255,255,.04)}
+    tbody td{padding:14px 20px;font-size:.875rem;color:#cbd5e1;vertical-align:middle}
+    .thumb-cell{display:flex;align-items:center;gap:10px}
+    .thumb-mini{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;
+                justify-content:center;font-size:1.3rem;flex-shrink:0}
+    .badge{padding:3px 9px;border-radius:50px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+    .badge-blue{background:rgba(99,102,241,.2);color:#818cf8}
+    .badge-green{background:rgba(16,185,129,.2);color:#34d399}
+    .badge-purple{background:rgba(168,85,247,.2);color:#c084fc}
+    .badge-orange{background:rgba(245,158,11,.2);color:#fbbf24}
+    .badge-red{background:rgba(239,68,68,.2);color:#f87171}
+    .action-btns{display:flex;gap:8px}
+    .edit-btn{padding:5px 12px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);
+              border-radius:8px;color:#818cf8;font-size:.78rem;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s}
+    .edit-btn:hover{background:rgba(99,102,241,.3)}
+    .content-btn{padding:5px 12px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);
+              border-radius:8px;color:#34d399;font-size:.78rem;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s}
+    .content-btn:hover{background:rgba(16,185,129,.28)}
+    .del-btn{padding:5px 12px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);
+             border-radius:8px;color:#f87171;font-size:.78rem;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s}
+    .del-btn:hover{background:rgba(239,68,68,.28)}
+    .status-pill{display:inline-block;padding:3px 9px;border-radius:50px;font-size:.68rem;font-weight:800;text-transform:uppercase}
+    .status-live{background:rgba(16,185,129,.16);color:#34d399}
+    .status-draft{background:rgba(245,158,11,.16);color:#fbbf24}
+
+    /* SPINNER */
+    .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.15);
+             border-top-color:#6366f1;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-row td{text-align:center;padding:40px;color:rgba(255,255,255,.3)}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);
+                   z-index:999;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.show{display:flex}
+    .modal{background:#12121f;border:1px solid rgba(255,255,255,.1);border-radius:24px;
+           max-width:600px;width:100%;padding:36px;position:relative;
+           max-height:90vh;overflow-y:auto;animation:pop .3s ease}
+    @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+    .modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);
+                 border:none;color:#fff;width:32px;height:32px;border-radius:50%;
+                 cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+    .modal h2{font-size:1.2rem;font-weight:800;margin-bottom:22px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group.full{grid-column:1/-1}
+    label{font-size:.75rem;color:rgba(255,255,255,.5);font-weight:500;letter-spacing:.4px;text-transform:uppercase}
+    input[type="text"],input[type="number"],select,textarea{
+      padding:10px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+      border-radius:10px;color:#fff;font-size:.875rem;font-family:'Inter',sans-serif;outline:none;
+      transition:border-color .2s,box-shadow .2s;width:100%}
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,.25)}
+    input:focus,select:focus,textarea:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+    select option{background:#1a1a2e}
+    textarea{resize:vertical;min-height:80px}
+    .check-row{display:flex;align-items:center;gap:10px;padding:10px 0;color:rgba(255,255,255,.75);font-size:.88rem}
+    .lessons-list{display:grid;gap:10px;margin-bottom:18px}
+    .lesson-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:rgba(255,255,255,.05);
+                border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px}
+    .lesson-row strong{display:block;color:#fff;font-size:.88rem;margin-bottom:4px}
+    .lesson-row span{color:rgba(255,255,255,.48);font-size:.78rem}
+    .modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:24px}
+    .btn-cancel{padding:10px 20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+               border-radius:10px;color:#e2e8f0;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s}
+    .btn-cancel:hover{background:rgba(255,255,255,.12)}
+    .btn-save{padding:10px 24px;background:linear-gradient(135deg,#6366f1,#a855f7);
+              border:none;border-radius:10px;color:#fff;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .2s}
+    .btn-save:hover{opacity:.9}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;right:24px;padding:13px 20px;border-radius:12px;
+           font-size:.88rem;font-weight:500;color:#fff;z-index:9999;
+           opacity:0;transform:translateY(16px);transition:all .3s;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{background:linear-gradient(135deg,#10b981,#059669)}
+    .toast.error{background:linear-gradient(135deg,#ef4444,#dc2626)}
+
+    @media(max-width:560px){.form-grid{grid-template-columns:1fr}.action-btns{flex-direction:column}}
+  </style>
+</head>
+<body>
+
+<!-- Access guard -->
+<script>
+  var _role = sessionStorage.getItem('userRole');
+  if (_role !== 'ADMIN' && _role !== 'INSTRUCTOR') {
+    document.write('<div style="text-align:center;padding:80px 20px"><div style="font-size:4rem">🚫</div><h2 style="color:#f87171;margin:16px 0">Access Denied</h2><p style="color:rgba(255,255,255,.4);margin-bottom:24px">Admins and instructors only.</p><a href="Homepage.html" style="padding:10px 24px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border-radius:10px;text-decoration:none;font-weight:600">Go Home</a></div>');
+    throw new Error('Access denied');
+  }
+</script>
+
+<div class="header">
+  <div>
+    <h1>📋 Course Manager</h1>
+    <div class="header-sub" id="pageSub">Admin Panel · Manage all courses</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="add-btn" id="addCourseBtn" onclick="openModal()">+ Add Course</button>
+    <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span style="color:rgba(255,255,255,.4);font-size:.85rem">All Courses</span>
+    <span class="count-badge" id="courseCount">…</span>
+  </div>
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Category</th>
+          <th>Level</th>
+          <th>Students</th>
+          <th>Rating</th>
+          <th>Status</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="coursesList">
+        <tr class="loading-row">
+          <td colspan="8"><span class="spinner"></span> Loading courses…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modalTitle">Add New Course</h2>
+    <input type="hidden" id="editId">
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Course Title</label>
+        <input type="text" id="fTitle" placeholder="e.g. Web Development">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="fCategory">
+          <option value="web">Web Dev</option>
+          <option value="data">Data Science</option>
+          <option value="ml">Machine Learning</option>
+          <option value="cloud">Cloud</option>
+          <option value="security">Cybersecurity</option>
+          <option value="mobile">Mobile</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Level</label>
+        <select id="fLevel">
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+          <option>All Levels</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Description</label>
+        <textarea id="fDesc" placeholder="Short course description…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Duration (e.g. 12 weeks)</label>
+        <input type="text" id="fDuration" placeholder="12 weeks">
+      </div>
+      <div class="form-group">
+        <label>Lessons</label>
+        <input type="number" id="fLessons" placeholder="80" min="1">
+      </div>
+      <div class="form-group">
+        <label>Students Enrolled</label>
+        <input type="number" id="fStudents" placeholder="1000" min="0">
+      </div>
+      <div class="form-group">
+        <label>Rating (0–5)</label>
+        <input type="number" id="fRating" placeholder="4.5" min="0" max="5" step="0.1">
+      </div>
+      <div class="form-group">
+        <label>Price</label>
+        <input type="text" id="fPrice" placeholder="Free or $99">
+      </div>
+      <div class="form-group">
+        <label>Price Amount</label>
+        <input type="number" id="fPriceAmount" placeholder="499" min="0" step="1">
+      </div>
+      <div class="form-group">
+        <label>Instructor</label>
+        <input type="text" id="fInstructor" placeholder="EduNest Faculty">
+      </div>
+      <div class="form-group">
+        <label>Instructor User</label>
+        <select id="fInstructorUserId">
+          <option value="">Unassigned</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Thumb Emoji</label>
+        <input type="text" id="fEmoji" placeholder="🌐">
+      </div>
+      <div class="form-group full">
+        <label>Full Syllabus</label>
+        <textarea id="fSyllabus" placeholder="Module 1...\nModule 2..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Badge Color</label>
+        <select id="fBadge">
+          <option value="badge-blue">Blue (Beginner)</option>
+          <option value="badge-green">Green (Data)</option>
+          <option value="badge-purple">Purple (ML/Design)</option>
+          <option value="badge-orange">Orange (Cloud)</option>
+          <option value="badge-red">Red (Security)</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Thumb Gradient (CSS)</label>
+        <input type="text" id="fGradient" placeholder="linear-gradient(135deg,#1e3a5f,#2563eb)">
+      </div>
+      <div class="form-group full">
+        <label>Enroll Page Link (optional)</label>
+        <input type="text" id="fLink" placeholder="enroll-webdev.html or leave blank">
+      </div>
+      <div class="form-group full">
+        <label>Publishing</label>
+        <div class="check-row"><input type="checkbox" id="fPublished" checked> Published and visible to students</div>
+        <div class="check-row"><input type="checkbox" id="fPremium"> Premium paid course</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" id="saveBtn" onclick="saveCourse()">Save Course</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT MODAL -->
+<div class="modal-overlay" id="contentOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContentModal()">✕</button>
+    <h2 id="contentTitle">Course Content</h2>
+    <input type="hidden" id="contentCourseId">
+    <div class="lessons-list" id="lessonsList"></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Lesson Title</label>
+        <input type="text" id="lTitle" placeholder="Introduction">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="lType">
+          <option value="VIDEO">Video</option>
+          <option value="PDF">PDF</option>
+          <option value="ASSIGNMENT">Assignment</option>
+          <option value="LINK">Link</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Sort Order</label>
+        <input type="number" id="lSort" min="0" value="1">
+      </div>
+      <div class="form-group">
+        <label>Video/PDF/Link URL</label>
+        <input type="text" id="lUrl" placeholder="https://...">
+      </div>
+      <div class="form-group full">
+        <label>Assignment / Notes</label>
+        <textarea id="lAssignment" placeholder="Assignment instructions or lesson notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeContentModal()">Done</button>
+      <button class="btn-save" onclick="saveLesson()">Add Lesson</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var role = sessionStorage.getItem('userRole') || '';
+  var currentUserId = sessionStorage.getItem('userId') || '';
+  var INSTRUCTORS = [];
+
+  if (role === 'INSTRUCTOR') {
+    document.getElementById('pageSub').textContent = 'Instructor Panel · Manage your assigned courses';
+    document.getElementById('addCourseBtn').style.display = 'none';
+  }
+
+  function showToast(msg, type) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + type;
+    setTimeout(function(){ t.classList.add('show'); }, 10);
+    setTimeout(function(){ t.classList.remove('show'); }, 3000);
+  }
+
+  function loadInstructors() {
+    if (role !== 'ADMIN') return Promise.resolve();
+    return fetch('/users/all', {
+      headers: { 'X-User-Role': role }
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(users){
+      INSTRUCTORS = (users || []).filter(function(u){ return (u.role || '').toUpperCase() === 'INSTRUCTOR'; });
+      var select = document.getElementById('fInstructorUserId');
+      select.innerHTML = '<option value="">Unassigned</option>' + INSTRUCTORS.map(function(u){
+        return '<option value="' + u.id + '">' + (u.name || u.email) + '</option>';
+      }).join('');
+    });
+  }
+
+  // ── Load Courses ───────────────────────────────────────────────
+  function loadCourses() {
+    var url = role === 'INSTRUCTOR' ? ('/courses/instructor/' + currentUserId) : '/courses/all';
+    fetch(url, {
+      headers: { 'X-User-Role': role, 'X-User-Id': currentUserId }
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        document.getElementById('courseCount').textContent = data.length + ' courses';
+        var tbody = document.getElementById('coursesList');
+        tbody.innerHTML = '';
+        if (!data.length) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:rgba(255,255,255,.3)">No courses yet. Add one!</td></tr>';
+          return;
+        }
+        data.forEach(function(c){
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td><div class="thumb-cell">' +
+              '<div class="thumb-mini" style="background:' + (c.thumbGradient||'#1e1e3f') + '">' + (c.thumbEmoji||'📖') + '</div>' +
+              '<span style="font-weight:600;color:#f1f5f9">' + c.title + '</span>' +
+            '</div></td>' +
+            '<td style="text-transform:capitalize">' + (c.category||'–') + '</td>' +
+            '<td><span class="badge ' + (c.badge||'badge-blue') + '">' + (c.level||'–') + '</span></td>' +
+            '<td>' + (c.students||0).toLocaleString() + '</td>' +
+            '<td>⭐ ' + (c.rating||0) + '</td>' +
+            '<td><span class="status-pill ' + (c.published ? 'status-live' : 'status-draft') + '">' + (c.published ? 'Published' : 'Draft') + '</span></td>' +
+            '<td>' + (c.price||'Free') + '</td>' +
+            '<td><div class="action-btns">' +
+              '<button class="edit-btn" onclick="editCourse(' + c.id + ')">Edit</button>' +
+              '<button class="content-btn" onclick="openContentModal(' + c.id + ',\'' + String(c.title).replace(/'/g,'') + '\')">Content</button>' +
+              (role === 'ADMIN' ? '<button class="del-btn"  onclick="deleteCourse(' + c.id + ',\'' + c.title + '\')">Delete</button>' : '') +
+            '</div></td>';
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(function(){ showToast('Failed to load courses ❌', 'error'); });
+  }
+
+  // ── Modal helpers ──────────────────────────────────────────────
+  function openModal(course) {
+    document.getElementById('editId').value        = course ? course.id : '';
+    document.getElementById('modalTitle').textContent = course ? '✏️ Edit Course' : '➕ Add New Course';
+    document.getElementById('fTitle').value        = course ? course.title     : '';
+    document.getElementById('fCategory').value     = course ? course.category  : 'web';
+    document.getElementById('fLevel').value        = course ? course.level     : 'Beginner';
+    document.getElementById('fDesc').value         = course ? course.description : '';
+    document.getElementById('fDuration').value     = course ? course.duration  : '';
+    document.getElementById('fLessons').value      = course ? course.lessons   : '';
+    document.getElementById('fStudents').value     = course ? course.students  : '';
+    document.getElementById('fRating').value       = course ? course.rating    : '';
+    document.getElementById('fPrice').value        = course ? course.price     : 'Free';
+    document.getElementById('fPriceAmount').value  = course ? (course.priceAmount || 0) : 0;
+    document.getElementById('fInstructor').value   = course ? (course.instructor || '') : '';
+    document.getElementById('fInstructorUserId').value = course && course.instructorUserId ? String(course.instructorUserId) : '';
+    document.getElementById('fEmoji').value        = course ? course.thumbEmoji : '';
+    document.getElementById('fBadge').value        = course ? course.badge     : 'badge-blue';
+    document.getElementById('fSyllabus').value     = course ? (course.syllabus || '') : '';
+    document.getElementById('fGradient').value     = course ? course.thumbGradient : '';
+    document.getElementById('fLink').value         = course ? (course.link||'') : '';
+    document.getElementById('fPublished').checked  = course ? !!course.published : true;
+    document.getElementById('fPremium').checked    = course ? !!course.premium : false;
+    document.getElementById('modalOverlay').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('show');
+  }
+
+  function editCourse(id) {
+    fetch('/courses/' + id)
+      .then(function(r){ return r.json(); })
+      .then(function(c){ openModal(c); })
+      .catch(function(){ showToast('Failed to load course ❌', 'error'); });
+  }
+
+  // ── Save Course ────────────────────────────────────────────────
+  function saveCourse() {
+    var id = document.getElementById('editId').value;
+    var payload = {
+      title:         document.getElementById('fTitle').value.trim(),
+      category:      document.getElementById('fCategory').value,
+      level:         document.getElementById('fLevel').value,
+      description:   document.getElementById('fDesc').value.trim(),
+      duration:      document.getElementById('fDuration').value.trim(),
+      lessons:       parseInt(document.getElementById('fLessons').value) || 0,
+      students:      parseInt(document.getElementById('fStudents').value) || 0,
+      rating:        parseFloat(document.getElementById('fRating').value) || 0,
+      price:         document.getElementById('fPrice').value.trim() || 'Free',
+      priceAmount:   parseFloat(document.getElementById('fPriceAmount').value) || 0,
+      premium:       document.getElementById('fPremium').checked,
+      instructor:    document.getElementById('fInstructor').value.trim(),
+      instructorUserId: document.getElementById('fInstructorUserId').value ? parseInt(document.getElementById('fInstructorUserId').value) : null,
+      syllabus:      document.getElementById('fSyllabus').value.trim(),
+      thumbEmoji:    document.getElementById('fEmoji').value.trim(),
+      badge:         document.getElementById('fBadge').value,
+      thumbGradient: document.getElementById('fGradient').value.trim(),
+      link:          document.getElementById('fLink').value.trim() || '#',
+      published:     document.getElementById('fPublished').checked
+    };
+    if (!payload.title) { showToast('Title is required', 'error'); return; }
+
+    var isEdit = !!id;
+    if (isEdit) payload.id = parseInt(id);
+
+    var btn = document.getElementById('saveBtn');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+
+    fetch(isEdit ? '/courses/update' : '/courses/add', {
+      method: isEdit ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-User-Role': role, 'X-User-Id': currentUserId },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ if (!r.ok) throw new Error(); return r.json(); })
+    .then(function(){
+      showToast(isEdit ? 'Course updated! ✅' : 'Course added! ✅', 'success');
+      closeModal();
+      loadCourses();
+    })
+    .catch(function(){ showToast('Save failed ❌', 'error'); })
+    .finally(function(){ btn.textContent = 'Save Course'; btn.disabled = false; });
+  }
+
+  function openContentModal(courseId, title) {
+    document.getElementById('contentCourseId').value = courseId;
+    document.getElementById('contentTitle').textContent = 'Content · ' + title;
+    document.getElementById('lTitle').value = '';
+    document.getElementById('lUrl').value = '';
+    document.getElementById('lAssignment').value = '';
+    document.getElementById('lSort').value = '1';
+    document.getElementById('contentOverlay').classList.add('show');
+    loadLessons(courseId);
+  }
+
+  function closeContentModal() {
+    document.getElementById('contentOverlay').classList.remove('show');
+  }
+
+  function loadLessons(courseId) {
+    var list = document.getElementById('lessonsList');
+    list.innerHTML = '<div style="color:rgba(255,255,255,.35)">Loading lessons...</div>';
+    fetch('/lessons/course/' + courseId)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (!data.length) {
+          list.innerHTML = '<div style="color:rgba(255,255,255,.35)">No lessons yet. Add the first lesson below.</div>';
+          return;
+        }
+        list.innerHTML = '';
+        data.forEach(function(l){
+          var row = document.createElement('div');
+          row.className = 'lesson-row';
+          row.innerHTML =
+            '<div><strong>' + (l.sortOrder || 0) + '. ' + (l.title || 'Lesson') + '</strong>' +
+            '<span>' + (l.type || 'LINK') + (l.contentUrl ? ' · ' + l.contentUrl : '') + '</span></div>' +
+            '<button class="del-btn" onclick="deleteLesson(' + l.id + ')">Delete</button>';
+          list.appendChild(row);
+        });
+      })
+      .catch(function(){ list.innerHTML = '<div style="color:#f87171">Failed to load lessons.</div>'; });
+  }
+
+  function saveLesson() {
+    var courseId = parseInt(document.getElementById('contentCourseId').value);
+    var payload = {
+      courseId: courseId,
+      title: document.getElementById('lTitle').value.trim(),
+      type: document.getElementById('lType').value,
+      contentUrl: document.getElementById('lUrl').value.trim(),
+      assignment: document.getElementById('lAssignment').value.trim(),
+      sortOrder: parseInt(document.getElementById('lSort').value) || 0
+    };
+    if (!payload.title) { showToast('Lesson title is required', 'error'); return; }
+    fetch('/lessons/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-User-Role': role },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ if (!r.ok) throw new Error(); return r.json(); })
+    .then(function(){
+      showToast('Lesson added ✅', 'success');
+      document.getElementById('lTitle').value = '';
+      document.getElementById('lUrl').value = '';
+      document.getElementById('lAssignment').value = '';
+      loadLessons(courseId);
+    })
+    .catch(function(){ showToast('Lesson save failed ❌', 'error'); });
+  }
+
+  function deleteLesson(id) {
+    if (!confirm('Delete this lesson?')) return;
+    var courseId = parseInt(document.getElementById('contentCourseId').value);
+    fetch('/lessons/delete/' + id, { method: 'DELETE', headers: { 'X-User-Role': role }})
+      .then(function(r){ if (!r.ok) throw new Error(); })
+      .then(function(){ showToast('Lesson deleted ✅', 'success'); loadLessons(courseId); })
+      .catch(function(){ showToast('Delete failed ❌', 'error'); });
+  }
+
+  // ── Delete Course ──────────────────────────────────────────────
+  function deleteCourse(id, title) {
+    if (!confirm('Delete "' + title + '"? This cannot be undone.')) return;
+    fetch('/courses/delete/' + id, {
+      method: 'DELETE',
+      headers: { 'X-User-Role': role }
+    })
+    .then(function(r){ if (!r.ok) throw new Error(); })
+    .then(function(){
+      showToast('"' + title + '" deleted ✅', 'success');
+      loadCourses();
+    })
+    .catch(function(){ showToast('Delete failed ❌', 'error'); });
+  }
+
+  window.onload = function() {
+    loadInstructors().finally(loadCourses);
+  };
+</script>
+</body>
+</html>

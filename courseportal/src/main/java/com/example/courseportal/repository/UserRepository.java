@@ -5,5 +5,6 @@ import com.example.courseportal.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    User findByEmailAndPassword(String email, String password);
+    User findFirstByEmailAndPasswordOrderByIdAsc(String email, String password);
+    User findFirstByEmailIgnoreCaseOrderByIdAsc(String email);
 }

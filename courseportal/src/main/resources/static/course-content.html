@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Content – EduNest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="theme.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#07070f;color:#e2e8f0;min-height:100vh}
+    body.light{background:#f6f7fb;color:#111827}
+    nav{height:64px;padding:0 30px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,7,15,.92);border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:10}
+    body.light nav{background:rgba(255,255,255,.92);border-color:#e5e7eb}
+    nav a,button{font-family:'Inter',sans-serif}
+    nav a{color:inherit;text-decoration:none;font-weight:800}
+    .nav-right{display:flex;gap:10px;align-items:center}
+    .nav-right a,.theme-toggle{color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.04);font-weight:700;font-size:.85rem;cursor:pointer}
+    body.light .nav-right a,body.light .theme-toggle{color:#374151;background:#fff;border-color:#d1d5db}
+    .page{max-width:1120px;margin:0 auto;padding:38px 22px}
+    .hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:24px}
+    h1{font-size:clamp(1.6rem,4vw,2.6rem);margin-bottom:8px}
+    p{color:rgba(255,255,255,.55);line-height:1.6}
+    body.light p{color:#4b5563}
+    .progress-box{min-width:240px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:16px}
+    body.light .progress-box{background:#fff;border-color:#e5e7eb;color:#111827}
+    body.light .lesson{background:#fff;border-color:#e5e7eb;color:#111827}
+    body.light .quiz-box{background:#f9fafb;border-color:#e5e7eb;color:#111827}
+    body.light .empty{background:#fff;border-color:#e5e7eb;color:#111827}
+    body.light .discussion-box{background:#fff;border-color:#e5e7eb;color:#111827}
+    body.light .note-box{background:#eef2ff;border-color:#c7d2fe;color:#111827}
+    .streak-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:999px;padding:6px 14px;font-size:.82rem;font-weight:700;color:#fbbf24;margin-top:10px}
+    .bar{height:8px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin-top:10px}
+    body.light .bar{background:#e5e7eb}
+    .fill{height:100%;background:linear-gradient(90deg,#6366f1,#10b981);transition:width .4s}
+    .lessons{display:grid;gap:14px}
+    .lesson,.quiz-box,.empty{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:18px}
+    .lesson-head{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+    .lesson h3{font-size:1rem}
+    .lesson-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .type{font-size:.7rem;font-weight:800;text-transform:uppercase;color:#a7f3d0;background:rgba(16,185,129,.14);border-radius:999px;padding:4px 10px}
+    .resource{display:inline-flex;margin-top:10px;color:#c4b5fd;text-decoration:none;font-weight:800}
+    .btn-sm{padding:8px 14px;border:0;border-radius:10px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:'Inter',sans-serif}
+    .complete{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff}
+    .complete.done{background:linear-gradient(135deg,#10b981,#059669)}
+    .btn-bookmark{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.12)}
+    .btn-bookmark.active{background:rgba(245,158,11,.2);color:#fbbf24;border-color:rgba(245,158,11,.4)}
+    body.light .btn-bookmark{background:#f3f4f6;color:#374151;border-color:#d1d5db}
+    .btn-note{background:rgba(99,102,241,.15);color:#a78bfa;border:1px solid rgba(99,102,241,.3)}
+    .quiz-box{margin-top:16px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:14px;padding:18px}
+    .quiz-box strong{font-size:.95rem;color:#a78bfa;display:block;margin-bottom:12px}
+    .quiz-q{padding:14px 0;border-top:1px solid rgba(255,255,255,.08)}
+    .quiz-q p{font-size:.92rem;font-weight:600;color:#e2e8f0;margin-bottom:10px}
+    body.light .quiz-q p{color:#111827}
+    body.light .quiz-q{border-color:#e5e7eb}
+    .quiz-option{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:6px 0;
+                 background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+                 border-radius:10px;cursor:pointer;transition:all .2s}
+    .quiz-option:hover{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.4)}
+    .quiz-option input[type=radio]{accent-color:#6366f1;width:16px;height:16px;flex-shrink:0}
+    .quiz-option label{cursor:pointer;font-size:.88rem;color:#e2e8f0;flex:1}
+    body.light .quiz-option{background:#f3f4f6;border-color:#d1d5db}
+    body.light .quiz-option:hover{background:#e0e7ff;border-color:#6366f1}
+    body.light .quiz-option label{color:#111827}
+    .quiz-option.selected{background:rgba(99,102,241,.2);border-color:#6366f1}
+    .quiz-submit{margin-top:14px;padding:11px 20px;border:0;border-radius:10px;
+                 background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;
+                 font-weight:700;cursor:pointer;font-size:.9rem;width:100%}
+    .quiz-result{margin-top:10px;padding:12px 16px;border-radius:10px;font-weight:700;font-size:.9rem;text-align:center}
+    .quiz-result.pass{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+    .quiz-result.fail{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25)}
+    /* Notes */
+    .note-box{background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:14px;margin-top:12px;display:none}
+    .note-box textarea{width:100%;min-height:80px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:inherit;font-family:'Inter',sans-serif;font-size:.88rem;padding:10px;resize:vertical}
+    body.light .note-box textarea{background:#f9fafb;border-color:#d1d5db;color:#111827}
+    .note-save{margin-top:8px;padding:8px 16px;border:0;border-radius:8px;background:#6366f1;color:#fff;font-weight:700;cursor:pointer;font-size:.85rem}
+    /* Discussion */
+    .discussion-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-top:12px;display:none}
+    .discussion-box h4{margin-bottom:12px;font-size:.95rem}
+    .disc-thread{display:grid;gap:10px;margin-bottom:14px;max-height:300px;overflow-y:auto}
+    .disc-msg{background:rgba(255,255,255,.05);border-radius:10px;padding:10px 14px}
+    body.light .disc-msg{background:#f3f4f6}
+    .disc-msg.reply{margin-left:24px;border-left:3px solid #6366f1}
+    .disc-author{font-weight:700;font-size:.82rem;color:#a78bfa}
+    .disc-text{font-size:.88rem;margin-top:4px;color:rgba(255,255,255,.8)}
+    body.light .disc-text{color:#374151}
+    .disc-time{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:4px}
+    .disc-reply-btn{font-size:.75rem;color:#6366f1;background:none;border:none;cursor:pointer;padding:0;margin-top:4px}
+    .disc-input-row{display:flex;gap:8px}
+    .disc-input-row input{flex:1;padding:10px 12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:inherit;font-family:'Inter',sans-serif;font-size:.88rem}
+    body.light .disc-input-row input{background:#f9fafb;border-color:#d1d5db;color:#111827}
+    .disc-send{padding:10px 16px;border:0;border-radius:10px;background:#6366f1;color:#fff;font-weight:700;cursor:pointer}
+    .toast{position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:13px 18px;border-radius:12px;opacity:0;transform:translateY(10px);transition:.25s;z-index:999}
+    .toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:720px){.hero{display:block}.progress-box{margin-top:16px}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">🪺 EduNest</a>
+  <div class="nav-right">
+    <button class="theme-toggle" onclick="toggleTheme()">Theme</button>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="course-detail.html" id="detailLink">Details</a>
+    <a href="bookmarks.html">🔖 Bookmarks</a>
+  </div>
+</nav>
+<main class="page">
+  <section class="hero">
+    <div>
+      <h1 id="courseTitle">Course</h1>
+      <p id="courseDesc">Loading course content...</p>
+      <div id="streakBadge" class="streak-badge" style="display:none">🔥 <span id="streakCount">0</span> day streak</div>
+    </div>
+    <div class="progress-box">
+      <strong id="progressText">0% complete</strong>
+      <div class="bar"><div class="fill" id="progressFill"></div></div>
+    </div>
+  </section>
+  <section class="lessons" id="lessons"></section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+var userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+var courseId = new URLSearchParams(window.location.search).get('courseId');
+var completed = {}, bookmarks = {}, notes = {};
+var replyingTo = {};
+if (!userId) { window.location.href = 'login.html'; }
+document.getElementById('detailLink').href = 'course-detail.html?id=' + encodeURIComponent(courseId || '');
+
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type === 'error' ? '#ef4444' : '#111827';
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+
+function loadStreak() {
+  fetch('/streaks/' + userId).then(function(r){ return r.json(); }).then(function(s) {
+    if (s && s.currentStreak > 0) {
+      document.getElementById('streakCount').textContent = s.currentStreak;
+      document.getElementById('streakBadge').style.display = 'inline-flex';
+    }
+  }).catch(function(){});
+}
+
+function recordActivity() {
+  fetch('/streaks/activity/' + userId, { method: 'POST' })
+    .then(function(r){ return r.json(); })
+    .then(function(s) {
+      if (s && s.currentStreak > 0) {
+        document.getElementById('streakCount').textContent = s.currentStreak;
+        document.getElementById('streakBadge').style.display = 'inline-flex';
+      }
+    }).catch(function(){});
+}
+
+function load() {
+  Promise.all([
+    fetch('/courses/' + courseId).then(function(r){ return r.json(); }),
+    fetch('/lessons/course/' + courseId).then(function(r){ return r.json(); }),
+    fetch('/progress/course?userId=' + userId + '&courseId=' + courseId).then(function(r){ return r.json(); }),
+    fetch('/quizzes/course/' + courseId).then(function(r){ return r.json(); }).catch(function(){ return []; }),
+    fetch('/bookmarks/user/' + userId).then(function(r){ return r.json(); }).catch(function(){ return []; }),
+    fetch('/notes/user/' + userId).then(function(r){ return r.json(); }).catch(function(){ return []; })
+  ]).then(function(results) {
+    var course = results[0] || {}, lessons = results[1] || [], progress = results[2] || {};
+    var quizzes = results[3] || [], bms = results[4] || [], userNotes = results[5] || [];
+    completed = {};
+    (progress.completedLessonIds || []).forEach(function(id){ completed[id] = true; });
+    bookmarks = {};
+    bms.forEach(function(b){ bookmarks[b.lessonId] = true; });
+    notes = {};
+    userNotes.forEach(function(n){ notes[n.lessonId] = n.content; });
+    document.getElementById('courseTitle').textContent = course.title || 'Course';
+    document.getElementById('courseDesc').textContent = course.description || 'Continue your course below.';
+    updateProgress(progress.progress || 0);
+    renderLessons(course, lessons, quizzes);
+    loadStreak();
+    recordActivity();
+  }).catch(function() {
+    document.getElementById('lessons').innerHTML = '<div class="empty"><h2>Starting Soon</h2><p>Course content could not be loaded right now.</p></div>';
+  });
+}
+
+function updateProgress(pct) {
+  document.getElementById('progressText').textContent = pct + '% complete';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function renderLessons(course, lessons, quizzes) {
+  var list = document.getElementById('lessons');
+  if (!course.published || !lessons.length) {
+    list.innerHTML = '<div class="empty"><h2>Starting Soon</h2><p>This course is on your dashboard, but lessons are not live yet.</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  lessons.forEach(function(lesson, idx) {
+    var row = document.createElement('article');
+    row.className = 'lesson';
+    var quizItems = quizzes.filter(function(q){ return Number(q.lessonId) === Number(lesson.id); });
+    var isBookmarked = !!bookmarks[lesson.id];
+    var hasNote = !!notes[lesson.id];
+    row.innerHTML =
+      '<div class="lesson-head">' +
+        '<h3>' + (idx + 1) + '. ' + (lesson.title || 'Lesson') + '</h3>' +
+        '<span class="type">' + (lesson.type || 'LINK') + '</span>' +
+      '</div>' +
+      (lesson.assignment ? '<p style="margin-top:8px">' + lesson.assignment + '</p>' : '') +
+      (lesson.contentUrl ? '<a class="resource" href="' + lesson.contentUrl + '" target="_blank" rel="noopener">📎 Open resource</a>' : '') +
+      '<div class="lesson-actions">' +
+        '<button class="btn-sm complete ' + (completed[lesson.id] ? 'done' : '') + '" onclick="markLesson(' + lesson.id + ',' + (!completed[lesson.id]) + ')">' +
+          (completed[lesson.id] ? '✅ Completed' : 'Mark Complete') +
+        '</button>' +
+        '<button class="btn-sm btn-bookmark ' + (isBookmarked ? 'active' : '') + '" id="bm-' + lesson.id + '" onclick="toggleBookmark(' + lesson.id + ',\'' + (lesson.title||'').replace(/'/g,'') + '\')">' +
+          (isBookmarked ? '🔖 Bookmarked' : '🔖 Bookmark') +
+        '</button>' +
+        '<button class="btn-sm btn-note" onclick="toggleNote(' + lesson.id + ')">' +
+          (hasNote ? '📝 Edit Note' : '📝 Add Note') +
+        '</button>' +
+        '<button class="btn-sm btn-note" style="background:rgba(168,85,247,.15);color:#c084fc;border-color:rgba(168,85,247,.3)" onclick="toggleDiscussion(' + lesson.id + ')">💬 Discussion</button>' +
+      '</div>' +
+      '<div class="note-box" id="note-' + lesson.id + '">' +
+        '<textarea id="note-text-' + lesson.id + '" placeholder="Write your notes here...">' + (notes[lesson.id] || '') + '</textarea>' +
+        '<button class="note-save" onclick="saveNote(' + lesson.id + ')">Save Note</button>' +
+      '</div>' +
+      '<div class="discussion-box" id="disc-' + lesson.id + '">' +
+        '<h4>💬 Q&A / Discussion</h4>' +
+        '<div class="disc-thread" id="disc-thread-' + lesson.id + '"><p style="color:rgba(255,255,255,.4);font-size:.85rem">Loading...</p></div>' +
+        '<div id="reply-label-' + lesson.id + '" style="font-size:.78rem;color:#a78bfa;margin-bottom:6px;display:none"></div>' +
+        '<div class="disc-input-row">' +
+          '<input type="text" id="disc-input-' + lesson.id + '" placeholder="Ask a question or share a thought...">' +
+          '<button class="disc-send" onclick="postDiscussion(' + lesson.id + ')">Send</button>' +
+        '</div>' +
+      '</div>' +
+      renderQuiz(lesson, quizItems);
+    list.appendChild(row);
+  });
+}
+
+function renderQuiz(lesson, questions) {
+  if (!questions.length) return '';
+  var html = '<div class="quiz-box" id="quiz-' + lesson.id + '">';
+  html += '<strong>📝 Quiz — ' + questions.length + ' Question' + (questions.length > 1 ? 's' : '') + '</strong>';
+  html += questions.map(function(q) {
+    var opts = ['A','B','C','D'].map(function(opt) {
+      var text = q['option' + opt] || q['option' + opt.toLowerCase()];
+      if (!text) return '';
+      return '<div class="quiz-option" onclick="selectOption(this,\'q' + q.id + '\')">' +
+        '<input type="radio" name="q' + q.id + '" value="' + opt + '" id="q' + q.id + opt + '">' +
+        '<label for="q' + q.id + opt + '">' + opt + '. ' + text + '</label>' +
+      '</div>';
+    }).join('');
+    return '<div class="quiz-q"><p>' + (q.question || '') + '</p>' + opts + '</div>';
+  }).join('');
+  html += '<button class="quiz-submit" onclick="submitQuiz(' + lesson.id + ')">Submit Quiz</button>';
+  html += '<div class="quiz-result" id="quiz-result-' + lesson.id + '" style="display:none"></div>';
+  html += '</div>';
+  return html;
+}
+
+function selectOption(el, name) {
+  // Highlight selected option
+  var parent = el.closest('.quiz-box');
+  if (!parent) return;
+  var radio = el.querySelector('input[type=radio]');
+  if (!radio) return;
+  // Deselect siblings
+  parent.querySelectorAll('input[name="' + name + '"]').forEach(function(r) {
+    r.closest('.quiz-option').classList.remove('selected');
+  });
+  radio.checked = true;
+  el.classList.add('selected');
+}
+
+function markLesson(lessonId, done) {
+  fetch('/progress/lesson', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({userId: +userId, courseId: +courseId, lessonId: lessonId, completed: done})
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    updateProgress(data.progress || 0);
+    toast(done ? '✅ Lesson completed!' : 'Lesson reopened');
+    load();
+    if (done) recordActivity();
+  });
+}
+
+function toggleBookmark(lessonId, lessonTitle) {
+  var courseTitle = document.getElementById('courseTitle').textContent;
+  fetch('/bookmarks/toggle', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({userId: +userId, lessonId: lessonId, courseId: +courseId, lessonTitle: lessonTitle, courseTitle: courseTitle})
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    bookmarks[lessonId] = data.bookmarked;
+    var btn = document.getElementById('bm-' + lessonId);
+    if (btn) {
+      btn.textContent = data.bookmarked ? '🔖 Bookmarked' : '🔖 Bookmark';
+      btn.className = 'btn-sm btn-bookmark' + (data.bookmarked ? ' active' : '');
+    }
+    toast(data.bookmarked ? '🔖 Bookmarked!' : 'Bookmark removed');
+  });
+}
+
+function toggleNote(lessonId) {
+  var box = document.getElementById('note-' + lessonId);
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+}
+
+function saveNote(lessonId) {
+  var content = document.getElementById('note-text-' + lessonId).value;
+  fetch('/notes/save', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({userId: +userId, lessonId: lessonId, courseId: +courseId, content: content})
+  }).then(function(r){ return r.json(); }).then(function() {
+    notes[lessonId] = content;
+    toast('📝 Note saved!');
+  });
+}
+
+function toggleDiscussion(lessonId) {
+  var box = document.getElementById('disc-' + lessonId);
+  var isOpen = box.style.display === 'block';
+  box.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) loadDiscussion(lessonId);
+}
+
+function loadDiscussion(lessonId) {
+  fetch('/discussions/lesson/' + lessonId).then(function(r){ return r.json(); }).then(function(items) {
+    var thread = document.getElementById('disc-thread-' + lessonId);
+    if (!items.length) {
+      thread.innerHTML = '<p style="color:rgba(255,255,255,.4);font-size:.85rem">No messages yet. Be the first!</p>';
+      return;
+    }
+    var topLevel = items.filter(function(i){ return !i.parentId; });
+    var replies = items.filter(function(i){ return !!i.parentId; });
+    thread.innerHTML = topLevel.map(function(msg) {
+      var msgReplies = replies.filter(function(r){ return r.parentId === msg.id; });
+      return '<div class="disc-msg">' +
+        '<div class="disc-author">' + (msg.userName || 'User') + '</div>' +
+        '<div class="disc-text">' + escHtml(msg.message) + '</div>' +
+        '<div class="disc-time">' + formatTime(msg.createdAt) + '</div>' +
+        '<button class="disc-reply-btn" onclick="setReply(' + lessonId + ',' + msg.id + ',\'' + escHtml(msg.userName||'User') + '\')">↩ Reply</button>' +
+        msgReplies.map(function(r) {
+          return '<div class="disc-msg reply">' +
+            '<div class="disc-author">' + (r.userName || 'User') + '</div>' +
+            '<div class="disc-text">' + escHtml(r.message) + '</div>' +
+            '<div class="disc-time">' + formatTime(r.createdAt) + '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+  });
+}
+
+function setReply(lessonId, parentId, parentName) {
+  replyingTo[lessonId] = parentId;
+  var label = document.getElementById('reply-label-' + lessonId);
+  label.textContent = 'Replying to ' + parentName;
+  label.style.display = 'block';
+  document.getElementById('disc-input-' + lessonId).focus();
+}
+
+function postDiscussion(lessonId) {
+  var input = document.getElementById('disc-input-' + lessonId);
+  var msg = input.value.trim();
+  if (!msg) return;
+  var userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || 'User';
+  fetch('/discussions/post', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      lessonId: lessonId, courseId: +courseId, userId: +userId,
+      userName: userName, message: msg,
+      parentId: replyingTo[lessonId] || null
+    })
+  }).then(function(r){ return r.json(); }).then(function() {
+    input.value = '';
+    replyingTo[lessonId] = null;
+    var label = document.getElementById('reply-label-' + lessonId);
+    if (label) label.style.display = 'none';
+    loadDiscussion(lessonId);
+  });
+}
+
+function submitQuiz(lessonId) {
+  fetch('/quizzes/lesson/' + lessonId).then(function(r){ return r.json(); }).then(function(qs) {
+    var answers = {};
+    qs.forEach(function(q){ var el = document.querySelector('input[name="q'+q.id+'"]:checked'); if (el) answers[q.id] = el.value; });
+    return fetch('/quizzes/submit', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({userId:+userId,courseId:+courseId,lessonId:lessonId,answers:answers})});
+  }).then(function(r){ return r.json(); }).then(function(a){
+    var pct = a.total > 0 ? Math.round((a.score / a.total) * 100) : 0;
+    var pass = pct >= 60;
+    var resultEl = document.getElementById('quiz-result-' + lessonId);
+    if (resultEl) {
+      resultEl.style.display = 'block';
+      resultEl.className = 'quiz-result ' + (pass ? 'pass' : 'fail');
+      resultEl.textContent = (pass ? '🎉 ' : '😔 ') + 'Score: ' + a.score + '/' + a.total + ' (' + pct + '%) — ' + (pass ? 'Passed!' : 'Keep practicing!');
+    }
+    toast((pass ? '🎉 ' : '') + 'Quiz score: ' + a.score + '/' + a.total);
+  });
+}
+
+function escHtml(str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function formatTime(dt) { if (!dt) return ''; try { return new Date(dt).toLocaleString(); } catch(e){ return ''; } }
+
+load();
+</script>
+<script src="chatbot.js"></script></body>
+</html>

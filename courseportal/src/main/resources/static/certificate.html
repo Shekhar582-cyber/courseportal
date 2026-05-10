@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate – EduNest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#080812;color:#e2e8f0;min-height:100vh;padding:32px}
+    .actions{max-width:980px;margin:0 auto 18px;display:flex;gap:10px;justify-content:flex-end}
+    .btn{border:none;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;text-decoration:none;color:#fff;background:linear-gradient(135deg,#6366f1,#10b981)}
+    .btn.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+    .certificate{max-width:980px;margin:0 auto;background:#f8fafc;color:#0f172a;border:12px solid #6366f1;
+      min-height:620px;padding:58px;text-align:center;position:relative}
+    .certificate:before{content:'';position:absolute;inset:18px;border:2px solid #10b981;pointer-events:none}
+    .kicker{font-size:.8rem;letter-spacing:4px;text-transform:uppercase;color:#6366f1;font-weight:800;margin-bottom:26px}
+    h1{font-size:3.2rem;margin-bottom:20px}
+    .text{font-size:1.05rem;color:#475569;margin:14px 0}
+    .name{font-size:2.4rem;font-weight:800;margin:20px 0;color:#111827}
+    .course{font-size:1.55rem;font-weight:800;margin:18px 0;color:#059669}
+    .footer{display:flex;justify-content:space-between;gap:20px;margin-top:70px;text-align:left;color:#475569}
+    .line{border-top:1px solid #94a3b8;padding-top:8px;min-width:180px}
+    .error{max-width:720px;margin:100px auto;text-align:center;color:#f87171}
+    @media print{body{background:#fff;padding:0}.actions{display:none}.certificate{border-color:#111827;max-width:none;min-height:100vh}}
+  </style>
+</head>
+<body>
+<div class="actions">
+  <a class="btn secondary" href="dashboard.html">Back</a>
+  <button class="btn" onclick="window.print()">Download / Print</button>
+</div>
+<main class="certificate" id="certificate" style="display:none">
+  <div class="kicker">EduNest</div>
+  <h1>Certificate of Completion</h1>
+  <p class="text">This certificate is proudly presented to</p>
+  <div class="name" id="studentName">Student</div>
+  <p class="text">for successfully completing</p>
+  <div class="course" id="courseTitle">Course</div>
+  <div class="footer">
+    <div class="line"><strong id="issuedAt">Issued</strong><br>Issue Date</div>
+    <div class="line"><strong id="certificateId">CP</strong><br>Certificate ID</div>
+  </div>
+</main>
+<div class="error" id="error" style="display:none">
+  <h2>Certificate not available</h2>
+  <p>This course must be completed before a certificate can be generated.</p>
+</div>
+<script>
+  var userId = sessionStorage.getItem('userId');
+  var courseId = new URLSearchParams(window.location.search).get('courseId');
+  if (!userId) window.location.href = 'login.html';
+  fetch('/certificates/user/' + userId + '/course/' + courseId)
+    .then(function(r){ if (!r.ok) throw new Error(); return r.json(); })
+    .then(function(data){
+      document.getElementById('studentName').textContent = data.studentName || 'Student';
+      document.getElementById('courseTitle').textContent = data.courseTitle || 'Course';
+      document.getElementById('issuedAt').textContent = data.issuedAt || '';
+      document.getElementById('certificateId').textContent = data.certificateId || '';
+      document.getElementById('certificate').style.display = 'block';
+    })
+    .catch(function(){ document.getElementById('error').style.display = 'block'; });
+</script>
+</body>
+</html>
